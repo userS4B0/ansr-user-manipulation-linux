@@ -29,7 +29,8 @@
   when: item.primarygroup is defined and item.servers | intersect(create_users_group_names)
   loop: '{{ users }}'
   loop_control:
-    label: "primarygroup: {{ item.primarygroup if item.primarygroup is defined else '' }}, primarygid: {{ item.primarygid if item.primarygid is defined else 'default' }}"
+    label: "primarygroup: {{ item.primarygroup if item.primarygroup is defined else '' }}, \
+            primarygid: {{ item.primarygid if item.primarygid is defined else 'default' }}"
   # Creating primary group before adding user to group
 
 # Get unique list of groups to create on the server
@@ -43,8 +44,8 @@
   # Getting unique list of groups to create on the server
 
 # Debug groups_as_list
-- name: debug show groups_as_list
-  debug:
+- name: Debug show groups_as_list
+  ansible.builtin.debug:
     var: groups_as_list
   when: debug_enabled_default | bool
   # Debugging groups_as_list variable when debug is enabled
@@ -77,7 +78,14 @@
   when: (item.user_state == 'present' or item.user_state == 'lock') and item.servers | intersect(create_users_group_names)
   loop: '{{ users }}'
   loop_control:
-    label: "username: {{ item.username }}, user_state: {{ item.user_state }}, password: {{ 'True' if item.password is defined else 'False' }}, update_password: {{ item.update_password if item.update_password is defined else default_update_password }}, primarygroup: {{ item.primarygroup if item.primarygroup is defined else ''}}, groups: {{ item.groups if item.groups is defined else ''}}, servers: {{ item.servers if item.servers is defined else '' }}, group_names: {{ create_users_group_names }}"
+    label: "username: {{ item.username }}, \
+            user_state: {{ item.user_state }}, \
+            password: {{ 'True' if item.password is defined else 'False' }}, \
+            update_password: {{ item.update_password if item.update_password is defined else default_update_password }}, \
+            primarygroup: {{ item.primarygroup if item.primarygroup is defined else '' }}, \
+            groups: {{ item.groups if item.groups is defined else '' }}, \
+            servers: {{ item.servers if item.servers is defined else '' }}, \
+            group_names: {{ create_users_group_names }}"
 
 # Add users | Unlock password login (set expiry to -1)
 - name: Add users | Unlock password login (set expiry to -1)
@@ -110,7 +118,9 @@
   when: item.ssh_key is defined and item.servers | intersect(create_users_group_names)
   loop: '{{ users }}'
   loop_control:
-    label: "username: {{ item.username }}, ssh_key: {{ 'True' if item.ssh_key is defined else 'False' }}, exclusive_ssh_key: {{ item.exclusive_ssh_key if item.exclusive_ssh_key is defined else 'False' }}"
+    label: "username: {{ item.username }}, \
+            ssh_key: {{ 'True' if item.ssh_key is defined else 'False' }}, \
+            exclusive_ssh_key: {{ item.exclusive_ssh_key if item.exclusive_ssh_key is defined else 'False' }}"
 
 # SSH Keys | Generate ssh key
 - name: SSH Keys | Generate ssh key
@@ -123,10 +133,14 @@
   when: item.generate_ssh_key is defined and item.servers | intersect(create_users_group_names)
   loop: '{{ users }}'
   loop_control:
-    label: "username: {{ item.username }}, generate_ssh_key: {{ 'True' if item.generate_ssh_key is defined else 'False' }}, ssh_key_bits: {{ item.ssh_key_bits if item.ssh_key_bits is defined else '' }}, ssh_key_passphrase: {{ 'True' if item.ssh_key_passphrase is defined else 'False' }}, generate_ssh_key_comment: {{ item.generate_ssh_key_comment if item.generate_ssh_key_comment is defined else default_generate_ssh_key_comment }}"
+    label: "username: {{ item.username }}, \
+            generate_ssh_key: {{ 'True' if item.generate_ssh_key is defined else 'False' }}, \
+            ssh_key_bits: {{ item.ssh_key_bits if item.ssh_key_bits is defined else '' }}, \
+            ssh_key_passphrase: {{ 'True' if item.ssh_key_passphrase is defined else 'False' }}, \
+            generate_ssh_key_comment: {{ item.generate_ssh_key_comment if item.generate_ssh_key_comment is defined else default_generate_ssh_key_comment }}"
 
 # Sudo | add to sudoers file and validate
-# FEATURE: Handle sudoers file by groups not by users 
+# FEATURE: Handle sudoers file by groups not by users
 - name: Sudo | add to sudoers file and validate
   ansible.builtin.lineinfile:
     dest: /etc/sudoers

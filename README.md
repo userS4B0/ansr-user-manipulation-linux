@@ -1,7 +1,5 @@
 # ansible-role-create-users
 
-[![Build Status](https://travis-ci.org/ryandaniels/ansible-role-create-users.svg?branch=master)](https://travis-ci.org/ryandaniels/ansible-role-create-users)
-
 Role to manage users on linux.  
 Manage users in the user list config file (list is in the file vars/secret).  
 Add users (with specific uid), change passwords, lock/unlock user accounts, manage sudo access (per user), add ssh key(s) for sshkey based authentication, set user's primary group and gid, add user (append) to group(s) and group will be created if doesn't exist.  
